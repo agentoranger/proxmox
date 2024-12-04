@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on errors
-set -e
+#set -e
 
 # Main function
 main() {
@@ -34,7 +34,7 @@ main() {
     create_container
 
     # Configure bind mounts for host users
-    #configure_mounts "$ct_vmid"
+    #configure_mounts
 
     # Start the container
     start_container 
@@ -111,12 +111,13 @@ create_container() {
     local gw6="${19:-$ct_gw6}"
     local firewall="${20:-$ct_firewall}"
     
-    local net0="name=eth0,bridge=$bridge,firewall=$firewall"
-        [ -n "$hwaddr" ] && net0+=",hwaddr=$hwaddr"
-        [ -n "$ip4" ]    && net0+=",ip=$ip4"
-        [ -n "$gw4" ]    && net0+=",gw=$gw4"
-        [ -n "$ip6" ]    && net0+=",ip6=$ip6"
-        [ -n "$gw6" ]    && net0+=",gw6=$gw6"
+    local net0="name=eth0,bridge=$bridge"
+	    [ -n "$firewall"] && net0+=",firewall=$firewall"
+        [ -n "$hwaddr" ]  && net0+=",hwaddr=$hwaddr"
+        [ -n "$ip4" ]     && net0+=",ip=$ip4"
+        [ -n "$gw4" ]     && net0+=",gw=$gw4"
+        [ -n "$ip6" ]     && net0+=",ip6=$ip6"
+        [ -n "$gw6" ]     && net0+=",gw6=$gw6"
 
     echo "### ------  LXC Container Configuration ------ ###"
     echo ""
@@ -162,9 +163,6 @@ configure_mounts() {
     local vmid="${1:-$ct_vmid}"
     echo "### ------ Configuring bind mounts: $hostname ($vmid) ------ ###"
 
-    ## Ensure destination files exist in the container
-    #pct exec "$vmid" -- touch /etc/passwd /etc/shadow /etc/group
-
     # Set bind mounts
     if pct set "$vmid" \
         -mp0 /etc/passwd,mp=/etc/passwd,ro=1 \
@@ -180,7 +178,7 @@ configure_mounts() {
 start_container() {
     local vmid="${1:-$ct_vmid}"
     echo -e "### ------ Starting LXC Container: $hostname ($vmid) ------ ###"
-    if pct start "$vmid"; then
+    if pct start "$vmid" --debug; then
         echo "[INFO] - Container $vmid started successfully"
     else
         echo "[ERROR] - Failed to start container $vmid" >&2
