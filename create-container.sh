@@ -112,7 +112,7 @@ create_container() {
     local firewall="${20:-$ct_firewall}"
     
     local net0="name=eth0,bridge=$bridge"
-	    [ -n "$firewall"] && net0+=",firewall=$firewall"
+        [ -n "$firewall"] && net0+=",firewall=$firewall"
         [ -n "$hwaddr" ]  && net0+=",hwaddr=$hwaddr"
         [ -n "$ip4" ]     && net0+=",ip=$ip4"
         [ -n "$gw4" ]     && net0+=",gw=$gw4"
