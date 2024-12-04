@@ -26,7 +26,7 @@ main() {
 	ct_console="0"														# Console Device:	0=Disabled | 1=Enabled
 	ct_cmode="shell"													# Console Mode:		console | shell | tty
 	ct_tty="0"															# ttys available:	Integer (0 - 6) (default = 2)
-    ct_unprivileged="0"													# Unprivileged:		0=Disabled | 1=Enabled
+	ct_unprivileged="0"													# Unprivileged:		0=Disabled | 1=Enabled
 	ct_description="nas.orange.guru"									# Description:		String to define the description
 	ct_ssh_keys="KEY"													# Public SSH keys:  One key per line, OpenSSH format
 
